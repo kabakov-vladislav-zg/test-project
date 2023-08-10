@@ -3,11 +3,11 @@
   lang="ts"
 >
 import { ref } from 'vue';
-import VCard from '@/components/VCard.vue';
 import VInputAvatar from '@/components/VInputAvatar.vue';
 import VInputText from '@/components/VInputText.vue';
 import VRadio from '@/components/VRadio.vue';
 import VBtn from '@/components/VBtn.vue';
+import VModal from '@/components/VModal.vue';
 import VSelect from '@/components/VSelect.vue';
 import IconEdit from '@/components/icons/IconEdit.vue';
 import IconTrash from '@/components/icons/IconTrash.vue';
@@ -17,6 +17,7 @@ const nameFirst = ref('');
 const nameLast = ref('');
 const text = ref('');
 const radio = ref(false);
+const modal = ref(false);
 const select = ref('worker');
 const items = ref([
   {
@@ -32,9 +33,12 @@ const items = ref([
 
 <template>
   <div class="container py-4">
-    <VCard
-      class="max-w-xl"
+    <VBtn
+      @click="modal = true"
     >
+      Кнопка
+    </VBtn>
+    <VModal v-model="modal">
       <VInputAvatar
         v-model="avatar"
       />
@@ -80,7 +84,7 @@ const items = ref([
         value-key="value"
         label="Роль"
       />
-    </VCard>
+    </VModal>
   </div>
 </template>
 
