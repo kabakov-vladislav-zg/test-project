@@ -9,6 +9,7 @@ import VBtn from '@/components/VBtn.vue';
 const props = withDefaults(defineProps<{
   modelValue?: string | number
   label?: string | number
+  disabled?: boolean
   textarea?: boolean
   readonly?: boolean
   minHeight?: string | number
@@ -40,7 +41,10 @@ const { value: maxHeight } = useCssSizeValue(() => props.maxHeight);
 <template>
   <label
     class="VInputText relative block w-full py-1 border-b border-slate-200 bg-white"
-    :class="[focus ? 'border-slate-800' : 'border-slate-200']"
+    :class="[
+      focus ? 'border-slate-800' : 'border-slate-200',
+      disabled ? 'VInputText_disabled' : '',
+    ]"
     @focusin="focus = true"
     @focusout="focus = false"
   >
@@ -118,5 +122,9 @@ const { value: maxHeight } = useCssSizeValue(() => props.maxHeight);
   position: absolute;
   top: 16px;
   right: 0;
+}
+.VInputText_disabled {
+  pointer-events: none;
+  filter: grayscale(1) brightness(220%);
 }
 </style>

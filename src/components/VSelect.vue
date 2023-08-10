@@ -10,6 +10,7 @@ import VBtn from '@/components/VBtn.vue';
 
 const props = withDefaults(defineProps<{
   modelValue: string | number | null
+  disabled?: boolean
   label: string | number
   items: Item[]
   nameKey: keyof Item,
@@ -48,6 +49,7 @@ const open = ref(false);
   <div class="VSelect relative">
     <VInputText
       :modelValue="currentName"
+      :disabled="disabled"
       readonly
       :label="label"
       @click="open = !open"
