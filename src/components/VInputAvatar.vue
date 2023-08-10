@@ -25,10 +25,12 @@ const img = computed({
 });
 const isError = ref(false);
 const onchange = ({ target }: Event) => {
-  if (!target || !(target instanceof HTMLInputElement)) return;
+  if (!target || !(target instanceof HTMLInputElement)) {
+    console.error(`Expected HTMLInputElement, got ${target}`);
+    return;
+  }
   const { files } = target;
-  if (!files) return;
-  const file = files[0];
+  const file = files?.[0];
   if (!file || !/\.(jpe?g|png)$/i.test(file.name)) {
     isError.value = true;
   } else {
@@ -63,7 +65,6 @@ const onchange = ({ target }: Event) => {
         <div class="flex justify-center bg-slate-500 bg-opacity-50">
           <IconCamera
             width="25%"
-            height="auto"
             class="text-slate-600"
           />
         </div>
