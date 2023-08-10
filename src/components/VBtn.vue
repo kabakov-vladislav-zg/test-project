@@ -48,6 +48,6 @@ const props = withDefaults(defineProps<{
 .VBtn:disabled {
   cursor: auto;
   pointer-events: none;
-  filter: grayscale(1) brightness(220%);
+  filter: grayscale(1) opacity(0.5);
 }
 </style>
