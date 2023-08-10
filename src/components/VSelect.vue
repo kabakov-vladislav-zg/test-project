@@ -9,20 +9,20 @@ import IconDown from '@/components/icons/IconDown.vue';
 import VBtn from '@/components/VBtn.vue';
 
 const props = withDefaults(defineProps<{
-  modelValue: string | number
+  modelValue: string | number | null
   label: string | number
   items: Item[]
   nameKey: keyof Item,
   valueKey: keyof Item,
 }>(), {});
 const emit = defineEmits<{
-  'update:modelValue': [value: string | number]
+  'update:modelValue': [value: string | number | null]
 }>();
 const inputValue = computed({
   get() {
     return props.modelValue;
   },
-  set(value: string | number) {
+  set(value: string | number | null) {
     emit('update:modelValue', value)
   },
 });
@@ -38,7 +38,7 @@ const currentName = computed(() => {
   return current ? getName(current) : undefined;
 });
 const onselect = (item: Item) => {
-  inputValue.value = getValue(item);
+  inputValue.value = getValue(item) || null;
   open.value = false;
 }
 const open = ref(false);
