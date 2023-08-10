@@ -10,6 +10,7 @@ import VInputText from '@/components/VInputText.vue';
 const avatar = ref('');
 const nameFirst = ref('');
 const nameLast = ref('');
+const text = ref('');
 </script>
 
 <template>
@@ -27,6 +28,11 @@ const nameLast = ref('');
       <VInputText
         v-model="nameLast"
         label="Фамилия"
+      />
+      <VInputText
+        v-model="text"
+        label="Текс"
+        textarea
       />
     </VCard>
   </div>

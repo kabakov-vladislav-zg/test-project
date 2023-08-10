@@ -7,8 +7,13 @@ import { computed, ref } from 'vue';
 const props = withDefaults(defineProps<{
   modelValue?: string | number
   label?: string | number
+  textarea?: boolean
+  height?: string | number
+  maxHeight?: string | number
 }>(), {
   modelValue: '',
+  height: 200,
+  maxHeight: 200,
 });
 const emit = defineEmits<{
   'update:modelValue': [value: string | number]
@@ -25,11 +30,28 @@ const oninput = ({ target }: Event) => {
   inputValue.value = (target as HTMLInputElement).value;
 }
 const focus = ref(false);
+const maxHeight = computed(() => {
+  const maxHeight = props.maxHeight;
+  if (typeof maxHeight === 'number') {
+    return `${maxHeight}px`;
+  } else {
+    return maxHeight;
+  }
+});
+const height = computed(() => {
+  const height = props.height;
+  if (typeof height === 'number') {
+    return `${height}px`;
+  } else {
+    return height;
+  }
+});
 </script>
 
 <template>
   <label
-    class="VInputText block w-full py-1 border-b border-slate-200 bg-white"
+    class="VInputText relative block w-full py-1 border-b border-slate-200 bg-white"
+    :class="[focus ? 'border-slate-800' : 'border-slate-200']"
     @focusin="focus = true"
     @focusout="focus = false"
   >
@@ -40,7 +62,15 @@ const focus = ref(false);
     >
       {{ label }}
     </span>
+    <textarea
+      v-if="textarea"
+      :value="inputValue"
+      class="VInputText__input VInputText__textarea w-full block"
+      :style="{ maxHeight, height }"
+      @input="oninput"
+    ></textarea>
     <input
+      v-else
       type="text"
       :value="inputValue"
       class="VInputText__input w-full block"
@@ -51,7 +81,10 @@ const focus = ref(false);
 
 <style>
 .VInputText__label {
-    position: relative;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
     display: block;
     pointer-events: none;
     transition: transform .25s;
@@ -62,6 +95,18 @@ const focus = ref(false);
   transform: scale(0.75);
 }
 .VInputText__input {
+  margin-top: 24px;
   outline: none!important;
+}
+.VInputText__textarea {
+  mask-image: linear-gradient(to bottom, transparent, #000 12px);
+  min-height: 24px;
+}
+.VInputText__textarea::-webkit-scrollbar {
+  background-color: transparent;
+  width: 6px;
+}
+.VInputText__textarea::-webkit-scrollbar-thumb {
+    background-color: #B5B7C0;
 }
 </style>
