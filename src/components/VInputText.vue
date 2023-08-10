@@ -9,6 +9,7 @@ const props = withDefaults(defineProps<{
   modelValue?: string | number
   label?: string | number
   textarea?: boolean
+  readonly?: boolean
   minHeight?: string | number
   maxHeight?: string | number
 }>(), {
@@ -53,16 +54,25 @@ const { value: maxHeight } = useCssSizeValue(() => props.maxHeight);
       v-if="textarea"
       :value="inputValue"
       class="VInputText__input VInputText__textarea w-full block"
+      :class="{ 'VInputText__input_appendInner' : $slots.appendInner }"
       :style="{ maxHeight, minHeight }"
       @input="oninput"
     ></textarea>
     <input
       v-else
       type="text"
+      :readonly="readonly"
       :value="inputValue"
       class="VInputText__input w-full block"
+      :class="{ 'VInputText__input_appendInner' : $slots.appendInner }"
       @input="oninput"
     />
+    <span
+      v-if="$slots.appendInner"
+      class="VInputText__appendInner"
+    >
+      <slot name="appendInner"></slot>
+    </span>
   </label>
 </template>
 
@@ -95,5 +105,13 @@ const { value: maxHeight } = useCssSizeValue(() => props.maxHeight);
 }
 .VInputText__textarea::-webkit-scrollbar-thumb {
     background-color: #B5B7C0;
+}
+.VInputText__input_appendInner {
+  padding-right: 40px;
+}
+.VInputText__appendInner {
+  position: absolute;
+  top: 16px;
+  right: 0;
 }
 </style>

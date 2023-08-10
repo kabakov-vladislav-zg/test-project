@@ -6,6 +6,7 @@ const props = withDefaults(defineProps<{
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
   ghost?: boolean
+  block?: boolean
 }>(), {
   type: 'button',
   disabled: false,
@@ -17,7 +18,10 @@ const props = withDefaults(defineProps<{
     :type="type"
     :disabled="disabled"
     class="VBtn rounded-lg"
-    :class="{ 'VBtn_ghost' : ghost }"
+    :class="{
+      'VBtn_ghost' : ghost,
+      'block w-full' : block,
+    }"
   >
     <slot></slot>
   </button>
@@ -36,6 +40,8 @@ const props = withDefaults(defineProps<{
   @apply bg-blue-600 text-white px-4 py-2;
 }
 .VBtn_ghost {
+  justify-content: flex-start;
+  text-align: left;
   color: inherit;
   @apply bg-transparent text-inherit p-2;
 }

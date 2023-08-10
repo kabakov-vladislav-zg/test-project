@@ -8,6 +8,7 @@ import VInputAvatar from '@/components/VInputAvatar.vue';
 import VInputText from '@/components/VInputText.vue';
 import VRadio from '@/components/VRadio.vue';
 import VBtn from '@/components/VBtn.vue';
+import VSelect from '@/components/VSelect.vue';
 import IconEdit from '@/components/icons/IconEdit.vue';
 import IconTrash from '@/components/icons/IconTrash.vue';
 
@@ -16,6 +17,17 @@ const nameFirst = ref('');
 const nameLast = ref('');
 const text = ref('');
 const radio = ref(false);
+const select = ref('worker');
+const items = ref([
+  {
+    name: 'Работник',
+    value: 'worker',
+  },
+  {
+    name: 'Директор',
+    value: 'director',
+  },
+])
 </script>
 
 <template>
@@ -61,6 +73,13 @@ const radio = ref(false);
       >
         <IconTrash />
       </VBtn>
+      <VSelect
+        v-model="select"
+        :items="items"
+        name-key="name"
+        value-key="value"
+        label="Роль"
+      />
     </VCard>
   </div>
 </template>
