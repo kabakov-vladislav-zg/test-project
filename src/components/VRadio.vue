@@ -53,7 +53,6 @@ const oninput = ({ target }: Event) => {
 .VRadio__toggle {
     width: 44px;
     height: 24px;
-    background: #E8E8EE;
     border-radius: 12px;
     display: flex;
     padding: 2px;
@@ -61,17 +60,18 @@ const oninput = ({ target }: Event) => {
     margin-bottom: 2px;
     cursor: pointer;
     transition: background-color ease 0.25s;
+    @apply bg-gray-200;
 }
 .VRadio__toggle::before {
     content: '';
     width: 20px;
     height: 20px;
-    background: #FFF;
     border-radius: 50%;
     transition: transform ease 0.25s;
+    @apply bg-white;
 }
 .VRadio__input:checked + .VRadio__toggle {
-    background: #C71E3F;
+    @apply bg-blue-600;
 }
 .VRadio__input:checked + .VRadio__toggle::before {
     transform: translateX(20px);
