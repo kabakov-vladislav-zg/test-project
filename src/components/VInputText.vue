@@ -9,11 +9,11 @@ const props = withDefaults(defineProps<{
   modelValue?: string | number
   label?: string | number
   textarea?: boolean
-  height?: string | number
+  minHeight?: string | number
   maxHeight?: string | number
 }>(), {
   modelValue: '',
-  height: 200,
+  minHeight: 24,
   maxHeight: 200,
 });
 const emit = defineEmits<{
@@ -31,7 +31,7 @@ const oninput = ({ target }: Event) => {
   inputValue.value = (target as HTMLInputElement).value;
 }
 const focus = ref(false);
-const { value: height } = useCssSizeValue(() => props.height);
+const { value: minHeight } = useCssSizeValue(() => props.minHeight);
 const { value: maxHeight } = useCssSizeValue(() => props.maxHeight);
 </script>
 
@@ -53,7 +53,7 @@ const { value: maxHeight } = useCssSizeValue(() => props.maxHeight);
       v-if="textarea"
       :value="inputValue"
       class="VInputText__input VInputText__textarea w-full block"
-      :style="{ maxHeight, height }"
+      :style="{ maxHeight, minHeight }"
       @input="oninput"
     ></textarea>
     <input
@@ -87,7 +87,7 @@ const { value: maxHeight } = useCssSizeValue(() => props.maxHeight);
 }
 .VInputText__textarea {
   mask-image: linear-gradient(to bottom, transparent, #000 12px);
-  min-height: 24px;
+  height: 200px;
 }
 .VInputText__textarea::-webkit-scrollbar {
   background-color: transparent;
