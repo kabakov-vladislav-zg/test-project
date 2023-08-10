@@ -7,7 +7,7 @@ import VInputAvatar from '@/components/VInputAvatar.vue';
 import VInputText from '@/components/VInputText.vue';
 import VBtn from '@/components/VBtn.vue';
 import VSelect from '@/components/VSelect.vue';
-import { useUserStore, } from '@/stores/user'
+import { useUserStore, } from '@/stores/user';
 import type { User } from '@/stores/user';
 
 const emit = defineEmits<{
@@ -43,6 +43,7 @@ const items = ref([
     value: 'director',
   },
 ]);
+const isPhoneAvaible = computed(() => role.value === 'director');
 const isValid = computed(() => !!nameFirst.value && !!nameLast.value && !!role.value);
 const saveUser = () => {
   if (!isValid.value || !role.value) return; // TODO Remove role revalidation
@@ -85,6 +86,12 @@ const saveUser = () => {
     <VInputText
       v-model="nameLast"
       label="Фамилия"
+      class="mb-4"
+    />
+    <VInputText
+      v-if="isPhoneAvaible"
+      v-model="phone"
+      label="Телефон"
       class="mb-4"
     />
     <VSelect
