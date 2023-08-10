@@ -2,7 +2,7 @@
   setup
   lang="ts"
 >
-import { computed } from 'vue';
+import { useCssSizeValue } from '@/composables/cssSizeValue';
 import IconAvatar from '@/components/icons/IconAvatar.vue';
 
 const props = withDefaults(defineProps<{
@@ -11,14 +11,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   width: 100
 });
-const width = computed(() => {
-  const width = props.width;
-  if (typeof width === 'number') {
-    return `${width}px`;
-  } else {
-    return width;
-  }
-});
+const { value: width } = useCssSizeValue(() => props.width);
 </script>
 
 <template>

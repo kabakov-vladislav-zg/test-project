@@ -3,6 +3,7 @@
   lang="ts"
 >
 import { computed, ref } from 'vue';
+import { useCssSizeValue } from '@/composables/cssSizeValue';
 
 const props = withDefaults(defineProps<{
   modelValue?: string | number
@@ -30,22 +31,8 @@ const oninput = ({ target }: Event) => {
   inputValue.value = (target as HTMLInputElement).value;
 }
 const focus = ref(false);
-const maxHeight = computed(() => {
-  const maxHeight = props.maxHeight;
-  if (typeof maxHeight === 'number') {
-    return `${maxHeight}px`;
-  } else {
-    return maxHeight;
-  }
-});
-const height = computed(() => {
-  const height = props.height;
-  if (typeof height === 'number') {
-    return `${height}px`;
-  } else {
-    return height;
-  }
-});
+const { value: height } = useCssSizeValue(() => props.height);
+const { value: maxHeight } = useCssSizeValue(() => props.maxHeight);
 </script>
 
 <template>
