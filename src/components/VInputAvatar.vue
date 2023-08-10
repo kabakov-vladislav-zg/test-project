@@ -48,7 +48,7 @@ const onchange = ({ target }: Event) => {
 </script>
 
 <template>
-  <div class="VInputAvatar pb-6 relative">
+  <div class="VInputAvatar relative">
     <VAvatar
       :img="img"
       class="VInputAvatar__img"
@@ -74,7 +74,7 @@ const onchange = ({ target }: Event) => {
       </div>
     </VAvatar>
     <div
-      class="absolute bottom-0 text-sm"
+      class="text-sm mt-1"
       :class="{ 'text-red-600': isError }"
     >
       Загрузите изображение в формате jpg, jpeg, png
