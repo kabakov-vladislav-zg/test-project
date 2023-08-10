@@ -4,6 +4,7 @@
 >
 import { computed, ref } from 'vue';
 import { useCssSizeValue } from '@/composables/cssSizeValue';
+import VBtn from '@/components/VBtn.vue';
 
 const props = withDefaults(defineProps<{
   modelValue?: string | number
@@ -71,7 +72,11 @@ const { value: maxHeight } = useCssSizeValue(() => props.maxHeight);
       v-if="$slots.appendInner"
       class="VInputText__appendInner"
     >
-      <slot name="appendInner"></slot>
+      <VBtn
+        ghost
+      >
+        <slot name="appendInner"></slot>
+      </VBtn>
     </span>
   </label>
 </template>

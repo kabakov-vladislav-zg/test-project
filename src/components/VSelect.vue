@@ -53,12 +53,9 @@ const open = ref(false);
       @click="open = !open"
     >
       <template #appendInner>
-        <VBtn
-          ghost
+        <IconDown
           :class="{ 'transform rotate-180' : open }"
-        >
-          <IconDown />
-        </VBtn>
+        />
       </template>
     </VInputText>
     <div
