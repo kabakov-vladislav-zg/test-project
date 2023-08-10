@@ -65,6 +65,7 @@ const onchange = ({ target }: Event) => {
         <div class="flex justify-center bg-slate-500 bg-opacity-50">
           <IconCamera
             width="25%"
+            height="0%"
             class="text-slate-600"
           />
         </div>
