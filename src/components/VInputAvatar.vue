@@ -34,14 +34,10 @@ const onchange = ({ target }: Event) => {
   } else {
     isError.value = false;
     const reader = new FileReader();
-    reader.addEventListener('load', () => {
-      const result = reader.result;
-      if (!result || result instanceof ArrayBuffer) {
-        
-      } else {
-        img.value = result;
-      }
-    }, { once: true });
+    reader.onload = () => {
+      const result = reader.result as string; // only used for readAsDataURL
+      img.value = result;
+    };
     reader.readAsDataURL(file);
   }
 }
