@@ -7,7 +7,7 @@ import FormUser from '@/components/FormUser.vue';
 import CardUser from '@/components/CardUser.vue';
 import VBtn from '@/components/VBtn.vue';
 import VModal from '@/components/VModal.vue';
-import VInputText from './components/VInputText.vue';
+import VTextarea from './components/VTextarea.vue';
 import VInputCheckbox from './components/VInputCheckbox.vue';
 import { useUserStore, } from '@/stores/user'
 import { userKey } from '@/keys/user';
@@ -81,7 +81,7 @@ const text = ref('Разнообразный и богатый опыт слож
       <h2 class="text-2xl mb-4">
         Задача 2
       </h2>
-      <VInputText
+      <VTextarea
         v-model="text"
         textarea
         label="Рыбатекст"

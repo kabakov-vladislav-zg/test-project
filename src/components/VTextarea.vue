@@ -3,6 +3,7 @@
   lang="ts"
 >
 import { computed } from 'vue';
+import { useCssSizeValue } from '@/composables/cssSizeValue';
 import VField from '@/components/VField.vue';
 import type { ComponentProps } from 'vue-component-type-helpers';
 
@@ -12,8 +13,12 @@ const props = withDefaults(defineProps<{
   label?: FieldProps['label']
   disabled?: FieldProps['disabled']
   readonly?: boolean
+  minHeight?: string | number
+  maxHeight?: string | number
 }>(), {
   modelValue: '',
+  minHeight: 24,
+  maxHeight: 200,
 });
 const emit = defineEmits<{
   'update:modelValue': [value: string | number]
@@ -29,6 +34,8 @@ const inputValue = computed({
 const oninput = ({ target }: Event) => {
   inputValue.value = (target as HTMLInputElement).value;
 }
+const { value: minHeight } = useCssSizeValue(() => props.minHeight);
+const { value: maxHeight } = useCssSizeValue(() => props.maxHeight);
 </script>
 
 <template>
@@ -36,17 +43,31 @@ const oninput = ({ target }: Event) => {
     :empty="!!inputValue"
     :label="label"
     :disabled="disabled"
-    class="VInputText"
+    class="VTextarea"
   >
-    <input
+    <textarea
       :value="inputValue"
       :readonly="readonly"
-      type="text"
-      class="VInputText__input w-full"
+      class="VTextarea__textarea w-full"
+      :style="{ maxHeight, minHeight }"
       @input="oninput"
-    />
+    ></textarea>
     <template #appendInner>
       <slot name="appendInner"></slot>
     </template>
   </VField>
 </template>
+
+<style>
+.VTextarea__textarea {
+  mask-image: linear-gradient(to bottom, transparent, #000 12px);
+  height: 200px;
+}
+.VTextarea__textarea::-webkit-scrollbar {
+  background-color: transparent;
+  width: 6px;
+}
+.VTextarea__textarea::-webkit-scrollbar-thumb {
+  @apply bg-slate-400;
+}
+</style>
