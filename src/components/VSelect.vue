@@ -7,23 +7,33 @@ import { computed, ref } from 'vue';
 import VInputText from '@/components/VInputText.vue';
 import IconDown from '@/components/icons/IconDown.vue';
 import VBtn from '@/components/VBtn.vue';
+import type { PickByValue } from '@/utils/types';
+import type { ComponentProps } from 'vue-component-type-helpers'
 
-const props = withDefaults(defineProps<{
-  modelValue: string | number | null
-  disabled?: boolean
-  label: string | number
-  items: Item[]
-  nameKey: keyof Item,
-  valueKey: keyof Item,
-}>(), {});
+type Value = string | number;
+type ModelValue = Value | null;
+type ValueKey = PickByValue<Item, Value>;
+type InputProps = ComponentProps<typeof VInputText>;
+type CurrentName = Exclude<InputProps['modelValue'], undefined>
+type NameKey = PickByValue<Item, CurrentName>;
+type Disabled = InputProps['disabled'];
+type Label = InputProps['label'];
+const props = defineProps<{
+  modelValue: ModelValue,
+  items: Item[],
+  valueKey: ValueKey,
+  nameKey: NameKey,
+  disabled?: Disabled,
+  label?: Label,
+}>();
 const emit = defineEmits<{
-  'update:modelValue': [value: string | number | null]
+  'update:modelValue': [value: ModelValue]
 }>();
 const inputValue = computed({
   get() {
     return props.modelValue;
   },
-  set(value: string | number | null) {
+  set(value: ModelValue) {
     emit('update:modelValue', value)
   },
 });
@@ -33,13 +43,13 @@ const getValue = (item: Item) => {
 const getName = (item: Item) => {
   return item[props.nameKey];
 }
-const currentName = computed(() => {
+const currentName = computed<CurrentName>(() => {
   const value = inputValue.value;
   const current = props.items.find((item) => getValue(item) === value);
-  return current ? getName(current) : undefined;
+  return current ? getName(current) : '';
 });
 const onselect = (item: Item) => {
-  inputValue.value = getValue(item) || null;
+  inputValue.value = getValue(item);
   open.value = false;
 }
 const open = ref(false);
@@ -76,6 +86,3 @@ const open = ref(false);
     </div>
   </div>
 </template>
-
-<style>
-</style>
