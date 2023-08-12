@@ -3,12 +3,12 @@
   lang="ts"
 >
 import { computed } from 'vue';
-const props = withDefaults(defineProps<{
+import VCheckbox from '@/components/VCheckbox.vue';
+
+const props = defineProps<{
   modelValue?: boolean
   label?: string | number
-}>(), {
-  modelValue: false,
-});
+}>();
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
 }>();
@@ -20,37 +20,27 @@ const inputValue = computed({
     emit('update:modelValue', value)
   },
 });
-const oninput = ({ target }: Event) => {
-  inputValue.value = (target as HTMLInputElement).checked;
-}
 </script>
 
 <template>
-  <label class="VRadio">
-      <input
-          :checked="inputValue"
-          type="checkbox"
-          class="VRadio__input"
-          @input="oninput"
+  <label class="VInputCheckbox">
+      <VCheckbox
+        v-model="inputValue"
+        class="VInputCheckbox__toggler"
       />
-      <span class="VRadio__toggle"></span>
-      <span class="VRadio__label">
-          {{ label }}
+      <span class="VInputCheckbox__state"></span>
+      <span class="VInputCheckbox__label">
+        {{ label }}
       </span>
   </label>
 </template>
 
 <style>
-.VRadio {
-    display: flex;
+.VInputCheckbox {
+    display: inline-flex;
     align-items: center;
 }
-.VRadio__input {
-    position: absolute;
-    clip: rect(0,0,0,0);
-    pointer-events: none;
-}
-.VRadio__toggle {
+.VInputCheckbox__state {
     width: 44px;
     height: 24px;
     border-radius: 12px;
@@ -62,7 +52,7 @@ const oninput = ({ target }: Event) => {
     transition: background-color ease 0.25s;
     @apply bg-gray-200;
 }
-.VRadio__toggle::before {
+.VInputCheckbox__state::before {
     content: '';
     width: 20px;
     height: 20px;
@@ -70,10 +60,10 @@ const oninput = ({ target }: Event) => {
     transition: transform ease 0.25s;
     @apply bg-white;
 }
-.VRadio__input:checked + .VRadio__toggle {
+.VInputCheckbox__toggler:checked + .VInputCheckbox__state {
     @apply bg-blue-600;
 }
-.VRadio__input:checked + .VRadio__toggle::before {
+.VInputCheckbox__toggler:checked + .VInputCheckbox__state::before {
     transform: translateX(20px);
 }
 </style>

@@ -8,6 +8,7 @@ import CardUser from '@/components/CardUser.vue';
 import VBtn from '@/components/VBtn.vue';
 import VModal from '@/components/VModal.vue';
 import VInputText from './components/VInputText.vue';
+import VInputCheckbox from './components/VInputCheckbox.vue';
 import { useUserStore, } from '@/stores/user'
 import { userKey } from '@/keys/user';
 import type { UserProvide } from '@/keys/user';
@@ -16,6 +17,7 @@ const store = useUserStore();
 const users = computed(() => store.users);
 const modal = ref(false);
 const userId = ref<number | null>(null);
+const isShowLastName = ref(false);
 const openModal = (id?: number) => {
   modal.value = true;
   userId.value = id ? id : null;
@@ -39,11 +41,18 @@ const text = ref('Разнообразный и богатый опыт слож
       <h2 class="text-2xl mb-4">
         Задача 1
       </h2>
-      <VBtn
-        @click="modal = true"
-      >
-        Добавить пользователя
-      </VBtn>
+      <div class="flex items-center">
+        <VBtn
+          @click="modal = true"
+        >
+          Добавить пользователя
+        </VBtn>
+        <VInputCheckbox
+          v-model="isShowLastName"
+          label="Показать фамилии"
+          class="ml-4"
+        />
+      </div>
       <hr class="border-b-1 border-gray-600 my-4">
       <div
         v-if="users.length"
