@@ -7,15 +7,16 @@ import { computed, ref } from 'vue';
 import VInputText from '@/components/VInputText.vue';
 import IconDown from '@/components/icons/IconDown.vue';
 import VBtn from '@/components/VBtn.vue';
-import type { PickByValue } from '@/utils/types';
+import type { PickByValue, $Keys } from 'utility-types';
 import type { ComponentProps } from 'vue-component-type-helpers'
 
 type Value = string | number;
 type ModelValue = Value | null;
-type ValueKey = PickByValue<Item, Value>;
+type PickKeysByValue<T, ValueType> = $Keys<PickByValue<T, ValueType>>;
+type ValueKey = PickKeysByValue<Item, Value>;
 type InputProps = ComponentProps<typeof VInputText>;
 type CurrentName = Exclude<InputProps['modelValue'], undefined>
-type NameKey = PickByValue<Item, CurrentName>;
+type NameKey = PickKeysByValue<Item, CurrentName>;
 type Disabled = InputProps['disabled'];
 type Label = InputProps['label'];
 const props = defineProps<{
