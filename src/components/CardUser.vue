@@ -6,21 +6,27 @@ import { inject } from 'vue';
 import VCard from '@/components/VCard.vue';
 import VAvatar from '@/components/VAvatar.vue';
 import VBtn from '@/components/VBtn.vue';
+import FormUser from '@/components/FormUser.vue';
 import IconTrash from '@/components/icons/IconTrash.vue';
 import IconEdit from '@/components/icons/IconEdit.vue';
-import { userKey } from '@/keys/user';
-import type { UserProvide } from '@/keys/user';
 import type { User } from '@/stores/user';
+import { useUserStore, } from '@/stores/user';
+import { modalKey } from '@/keys/modalProvider';
 
-defineProps<{
+const props = defineProps<{
   user: User
 }>();
-
-// я бы сделал через события, но не придумал куда ещё provide/inject засунуть, как в тз требуется
-const { changeUser, deleteUser } = inject<UserProvide>(userKey, {
-  changeUser(id?: number) {},
-  deleteUser(id: number) {},
-});
+const { deleteUser } = useUserStore();
+const modal = inject(modalKey, { open(){}, close(){} });
+const openModal = () => {
+  const component = FormUser;
+  const { userId } = props.user;
+  const bindings = { userId }
+  const events = {
+    submit: () => modal.close(),
+  };
+  modal.open({ component, bindings, events })
+};
 </script>
 
 <template>
@@ -48,7 +54,7 @@ const { changeUser, deleteUser } = inject<UserProvide>(userKey, {
         <VBtn
           ghost
           class="mr-4"
-          @click="changeUser(user.userId)"
+          @click="openModal"
         >
           <IconEdit />
         </VBtn>
