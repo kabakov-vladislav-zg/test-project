@@ -6,10 +6,12 @@ import { computed, ref } from 'vue';
 import VAvatar from '@/components/VAvatar.vue';
 import IconCamera from '@/components/icons/IconCamera.vue';
 import { getDataURLs } from '@/utils/files';
+import type { ComponentProps } from 'vue-component-type-helpers'
 
+type AvatarProps = ComponentProps<typeof VAvatar>;
 const props = withDefaults(defineProps<{
   modelValue?: string
-  width?: string | number
+  width?: AvatarProps['width']
 }>(), {
   modelValue: '',
 });
