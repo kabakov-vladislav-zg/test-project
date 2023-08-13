@@ -5,6 +5,7 @@
 import { computed, ref } from 'vue';
 import VAvatar from '@/components/VAvatar.vue';
 import IconCamera from '@/components/icons/IconCamera.vue';
+import { getDataURLs } from '@/utils/files';
 
 const props = withDefaults(defineProps<{
   modelValue?: string
@@ -23,25 +24,23 @@ const img = computed({
     emit('update:modelValue', value)
   },
 });
-const isError = ref(false);
-const onchange = ({ target }: Event) => {
-  if (!target || !(target instanceof HTMLInputElement)) {
-    console.error(`Expected HTMLInputElement, got ${target}`);
-    return;
-  }
-  const { files } = target;
-  const file = files?.[0];
-  if (!file || !/\.(jpe?g|png)$/i.test(file.name)) {
-    isError.value = true;
+const errorMessage = ref('');
+const setImg = async (files: FileList) => {
+  const [file] = await getDataURLs(files, { type: /image\/(jpe?g|png)/i });
+  const { data, error, valid, name } = file;
+  if (error) {
+    errorMessage.value = `Ошибка при загрузке файла ${name}`;
+  } else if (!valid) {
+    errorMessage.value = `Неверный формат файла ${name}`;
   } else {
-    isError.value = false;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result as string; // only used for readAsDataURL
-      img.value = result;
-    };
-    reader.readAsDataURL(file);
+    errorMessage.value = '';
+    img.value = data;
   }
+};
+const onchange = ({ target }: Event) => {
+  const files = (target as HTMLInputElement).files;
+  if (!files) return;
+  setImg(files);
 }
 </script>
 
@@ -71,11 +70,14 @@ const onchange = ({ target }: Event) => {
         </div>
       </div>
     </VAvatar>
-    <div
-      class="text-sm mt-1"
-      :class="{ 'text-red-600': isError }"
-    >
+    <div class="text-sm mt-1">
       Загрузите изображение в формате jpg, jpeg, png
+    </div>
+    <div
+      v-if="errorMessage"
+      class="text-red-600"
+    >
+      {{ errorMessage }}
     </div>
   </div>
 </template>
