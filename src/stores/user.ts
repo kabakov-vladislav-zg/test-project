@@ -2,11 +2,11 @@ import { defineStore } from 'pinia'
 
 export interface User {
   userId: number
-  avatar?: string
+  avatar: string
   nameFirst: string
   nameLast: string
   role: 'worker' | 'director'
-  phone?: number | string
+  phone: number | string
 }
 export interface State {
   users: User[],

@@ -2,7 +2,7 @@
   setup
   lang="ts"
 >
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, reactive } from 'vue';
 import VInputAvatar from '@/components/VInputAvatar.vue';
 import VInputText from '@/components/VInputText.vue';
 import VBtn from '@/components/VBtn.vue';
@@ -10,29 +10,30 @@ import VSelect from '@/components/VSelect.vue';
 import { useUserStore, } from '@/stores/user';
 import type { User } from '@/stores/user';
 
-const emit = defineEmits<{
-  'submit': [user: User],
-}>();
-const store = useUserStore()
-const props = defineProps<{
+const { userId } = defineProps<{
   userId?: number | null
 }>();
-const avatar = ref('');
-const nameFirst = ref('');
-const nameLast = ref('');
-const phone = ref<string | number | undefined>('');
-const role = ref<User['role'] | null>(null);
-onMounted(() => {
-  const id = props.userId;
-  if (!id) return;
-  const user = store.getUser(id);
-  if (!user) return;
-  avatar.value = user.avatar || '';
-  nameFirst.value = user.nameFirst;
-  nameLast.value = user.nameLast;
-  phone.value = user.phone;
-  role.value = user.role;
-});
+const emit = defineEmits<{
+  'submit': [],
+}>();
+const store = useUserStore();
+type NewUser = Omit<User, 'userId' | 'role'> & { role: User['role'] | null };
+const user = reactive<NewUser>({
+  avatar: '',
+  nameFirst: '',
+  nameLast: '',
+  phone: '',
+  role: null,
+})
+if (userId) {
+  const savedUser = store.getUser(userId);
+  if (savedUser) {
+    const { userId, ...currentUser } = savedUser;
+    Object.assign(user, currentUser);
+  } else {
+    console.error('user is undefined');
+  }
+}
 const items = ref([
   {
     name: 'Работник',
@@ -43,59 +44,43 @@ const items = ref([
     value: 'director',
   },
 ]);
-const isPhoneAvaible = computed(() => role.value === 'director');
-const isValid = computed(() => !!nameFirst.value && !!nameLast.value && !!role.value);
+const isPhoneAvaible = computed(() => user.role === 'director');
+const isValid = computed(() => !!user.nameFirst && !!user.nameLast && !!user.role);
 const saveUser = () => {
-  if (!isValid.value || !role.value) return; // TODO Remove role revalidation
-  const id = props.userId;
-  const user = {
-    avatar: avatar.value,
-    nameFirst: nameFirst.value,
-    nameLast: nameLast.value,
-    phone: phone.value,
-    role: role.value,
-  };
-  if (id) {
-    const currentUser = {
-      userId: id,
-      ...user
-    }
-    store.changeUser(currentUser);
-    emit('submit', currentUser);
+  if (!isValid.value) return;
+  if (userId) {
+    store.changeUser({ userId, ...user } as User);
   } else {
-    const id = store.saveUser(user);
-    emit('submit', {
-      userId: id,
-      ...user
-    });
+    store.saveUser(user as User);
   }
+  emit('submit');
 };
 </script>
 
 <template>
   <div class="FormUser">
     <VInputAvatar
-      v-model="avatar"
+      v-model="user.avatar"
       class="mb-4"
     />
     <VInputText
-      v-model="nameFirst"
+      v-model="user.nameFirst"
       label="Имя"
       class="mb-4"
     />
     <VInputText
-      v-model="nameLast"
+      v-model="user.nameLast"
       label="Фамилия"
       class="mb-4"
     />
     <VInputText
       v-if="isPhoneAvaible"
-      v-model="phone"
+      v-model="user.phone"
       label="Телефон"
       class="mb-4"
     />
     <VSelect
-      v-model="role"
+      v-model="user.role"
       :items="items"
       :disabled="!!userId"
       name-key="name"
@@ -118,7 +103,3 @@ const saveUser = () => {
     </VBtn>
   </div>
 </template>
-
-<style>
-
-</style>
