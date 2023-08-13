@@ -16,10 +16,12 @@ const isShowLastName = ref(true);
 const modal = inject(modalKey, { open(){}, close(){} });
 const openModal = () => {
   const component = FormUser;
-  const events = {
-    submit: () => modal.close(),
+  const bindings = {
+    onSubmit() {
+      modal.close();
+    },
   };
-  modal.open({ component, events })
+  modal.open({ component, bindings })
 };
 </script>
 

@@ -22,11 +22,13 @@ const modal = inject(modalKey, { open(){}, close(){} });
 const openModal = () => {
   const component = FormUser;
   const { userId } = props.user;
-  const bindings = { userId }
-  const events = {
-    submit: () => modal.close(),
+  const bindings = {
+    userId,
+    onSubmit() {
+      modal.close();
+    },
   };
-  modal.open({ component, bindings, events })
+  modal.open({ component, bindings })
 };
 </script>
 

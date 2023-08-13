@@ -6,17 +6,20 @@ import { reactive, provide, markRaw } from 'vue';
 import type { ModalOptions } from '@/keys/modalProvider';
 import { modalKey } from '@/keys/modalProvider';
 import VModal from '@/components/VModal.vue';
+import type { Component } from 'vue'
 
-const modal = reactive<ModalOptions & { state: boolean }>({
+const modal = reactive<{
+  state: boolean,
+  component: Component,
+  bindings: object | null,
+}>({
   state: false,
   component: {},
   bindings: null,
-  events: null,
 });
-const open = (options: ModalOptions) => {
+const open = <T extends Component>(options: ModalOptions<T>) => {
   modal.component = markRaw(options.component);
   modal.bindings = options.bindings || null;
-  modal.events = options.events || null;
   modal.state = true;
 }
 const close = () => {
@@ -32,7 +35,6 @@ provide(modalKey, { open, close });
       <component
         :is="modal.component"
         v-bind="modal.bindings"
-        v-on="modal.events"
       />
     </VModal>
   </div>
