@@ -15,6 +15,7 @@ import { modalKey } from '@/keys/modalProvider';
 
 const props = defineProps<{
   user: User
+  showLastName: boolean
 }>();
 const { deleteUser } = useUserStore();
 const modal = inject(modalKey, { open(){}, close(){} });
@@ -43,7 +44,7 @@ const openModal = () => {
         <div>
           Имя: {{ user.nameFirst }}
         </div>
-        <div>
+        <div v-if="showLastName">
           Фамилия: {{ user.nameLast }}
         </div>
         <div v-if="user.phone">

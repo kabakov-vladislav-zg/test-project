@@ -12,7 +12,7 @@ import { modalKey } from '@/keys/modalProvider';
 
 const store = useUserStore();
 const users = computed(() => store.users);
-const isShowLastName = ref(false);
+const isShowLastName = ref(true);
 const modal = inject(modalKey, { open(){}, close(){} });
 const openModal = () => {
   const component = FormUser;
@@ -46,6 +46,7 @@ const openModal = () => {
         v-for="user in users"
         :key="user.userId"
         :user="user"
+        :show-last-name="isShowLastName"
       />
     </div>
     <div
